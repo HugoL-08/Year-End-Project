@@ -1,9 +1,9 @@
 import javax.swing.*;
 import java.util.*;
 import java.math.*;
-//import java.awt.event.*;
+import java.awt.event.*;
 
-public class Test
+public class Test implements ActionListener
   {
 
     private static JFrame frame;
@@ -36,6 +36,11 @@ public class Test
     public static JSlider cardPick;
     public static JButton guess;
     //The drop down box allows the user to select which card to guess while the button confirms the guess.
+
+    public Test()
+    {
+
+    }
 
     public static void main(String[] args)
     {
@@ -88,6 +93,9 @@ public class Test
       cardPick.setPaintLabels(true);
       guess = new JButton("Guess");
       guess.setBounds(280,400,90,60);
+
+      Test t = new Test();
+      guess.addActionListener(t);
 
       frame.add(cardPick);
       frame.add(guess);
@@ -201,6 +209,55 @@ public class Test
             label.setText(labelText + player2Cards[h] + ", ");
       }
     }
+  }
+}
+public void actionPerformed(ActionEvent e)
+{
+  if (e.getActionCommand().equals("Guess"))
+  {
+    int value = cardPick.getValue();
+    boolean yes = false;
+    String[] all = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
+    for (int i = 0; i < 13; i++){
+    if (all[value - 1].equals(playerCards[i])){
+      yes = true;
+      for (int j = 0; j < 13; j++){
+      if (all[value - 1].equals(player2Cards[j])){
+        player1points += 1;
+        scoreLabel.setText("Your score is: " + player1points);
+        String playerpair = player1pairs.getText();
+        player1pairs.setText(playerpair + playerCards[i] + ", ");
+      playerCards[i] = "";
+      player2Cards[j] = "";
+      pair2 --;
+      opponentAmount.setText("Your opponent has " + pair2 + " cards");
+      }
+    }
+    }
+    }
+    label.setText("Your cards are ");
+      String labelText = "";
+      if (currentplayer == 1){
+        opponentAmount.setText("Your opponent has " + pair2 + " cards");
+        opponentScore.setText("Opponent score is " + player2points);
+        scoreLabel.setText("Your score is: " + player1points);
+        for (int h = 0; h < 13; h++){
+              if (playerCards[h] != ""){
+                labelText = label.getText();
+            label.setText(labelText + playerCards[h] + ", ");
+              }
+            }
+      } else{
+        opponentAmount.setText("Your opponent has " + pair1 + " cards");
+        opponentScore.setText("Opponent score is " + player1points);
+        scoreLabel.setText("Your score is: " + player2points);
+        for (int h = 0; h < 13; h++){
+              if (player2Cards[h] != ""){
+                labelText = label.getText();
+            label.setText(labelText + player2Cards[h] + ", ");
+      }
+    }
+  }
   }
 }
   }
