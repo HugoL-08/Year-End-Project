@@ -36,6 +36,9 @@ public class Test implements ActionListener
     public static JSlider cardPick;
     public static JButton guess;
     //The drop down box allows the user to select which card to guess while the button confirms the guess.
+    public static JButton endTurn;
+    public static JButton startTurn;
+    public static JLabel warn;
 
     public Test()
     {
@@ -93,17 +96,30 @@ public class Test implements ActionListener
       cardPick.setPaintLabels(true);
       guess = new JButton("Guess");
       guess.setBounds(280,400,90,60);
+      endTurn = new JButton("Finish Turn");
+      endTurn.setBounds(280,400,150,60);
+      startTurn = new JButton("Start Turn");
+      startTurn.setBounds(280,400,150,60);
+      warn = new JLabel("Switch with the other player BEFORE pressing the button.");
+      warn.setBounds(200,150,600,100);
 
       Test t = new Test();
       guess.addActionListener(t);
+      endTurn.addActionListener(t);
+      startTurn.addActionListener(t);
 
       frame.add(cardPick);
       frame.add(guess);
+      frame.add(endTurn);
+      frame.add(startTurn);
+      startTurn.setVisible(false);
+      endTurn.setVisible(false);
       frame.add(label);
+      frame.add(warn);
+      warn.setVisible(false);
       frame.add(scoreLabel);
       frame.add(opponentScore);
       frame.add(opponentAmount);
-      frame.add(player1pairs);
       frame.add(player1pairs);
       
       frame.setVisible(true);
@@ -216,11 +232,11 @@ public void actionPerformed(ActionEvent e)
   if (e.getActionCommand().equals("Guess"))
   {
     int value = cardPick.getValue();
-    boolean yes = false;
+    int r = 0;
+    int checkcards = pair2;
     String[] all = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
     for (int i = 0; i < 13; i++){
     if (all[value - 1].equals(playerCards[i])){
-      yes = true;
       for (int j = 0; j < 13; j++){
       if (all[value - 1].equals(player2Cards[j])){
         player1points += 1;
@@ -231,10 +247,40 @@ public void actionPerformed(ActionEvent e)
       player2Cards[j] = "";
       pair2 --;
       opponentAmount.setText("Your opponent has " + pair2 + " cards");
+      guess.setVisible(false);
+      endTurn.setVisible(true);
+      }
+    }
+    if (checkcards == pair2){
+      for (int j = 0; j < 13; j++){
+        r = (int)(Math.random() * 52);
+        while (CardArr[r] == ""){
+          r = (int)(Math.random()*52);
+        }
+        if ((playerCards[j] == "")&&(CardArr[r] != "")){
+        playerCards[j] = CardArr[r];
+        CardArr[r] = "";
+        guess.setVisible(false);
+        endTurn.setVisible(true);
+        break;
+        }
       }
     }
     }
-    }
+  }
+  String playerpair = "";
+  for (int i = 0; i < 13; i++){
+        for (int j = 0; j < 13; j++){
+          if ((playerCards[i] == playerCards[j])&&(i != j)&&(playerCards[i] !="")){
+            player1points += 1;
+            playerpair = player1pairs.getText();
+            player1pairs.setText(playerpair + playerCards[i] + ", ");
+            playerCards[i] = "";
+            playerCards[j] = "";
+            pair1 -= 2;
+            }
+          }
+        }
     label.setText("Your cards are ");
       String labelText = "";
       if (currentplayer == 1){
@@ -258,6 +304,16 @@ public void actionPerformed(ActionEvent e)
       }
     }
   }
+  }
+  if (e.getActionCommand().equals("Finish Turn")){
+    warn.setVisible(true);
+    label.setVisible(false);
+    startTurn.setVisible(true);
+    scoreLabel.setVisible(false);
+    opponentAmount.setVisible(false);
+    opponentScore.setVisible(false);
+    player1pairs.setVisible(false);
+    endTurn.setVisible(false);
   }
 }
   }
