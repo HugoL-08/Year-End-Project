@@ -52,6 +52,9 @@ public class Game implements ActionListener {
         guessList = new JList();
         guessList.setBounds(350, 100, 200, 300);
 
+        playerOneListModel = new DefaultListModel<String>();
+        playerTwoListModel = new DefaultListModel<String>();
+
         guessButton = new JButton("Guess");
         guessButton.setBounds(150, 350, 100, 65);
 
@@ -149,3 +152,4 @@ public class Game implements ActionListener {
         }
     }
 }
+
