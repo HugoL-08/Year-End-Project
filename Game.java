@@ -15,6 +15,13 @@ public class Game implements ActionListener {
     private static DefaultListModel<String> playerOneListModel;
     private static DefaultListModel<String> playerTwoListModel;
     private static JButton guessButton;
+    private static JLabel player1Score;
+    private static JLabel player2Score;
+    private static JLabel player1Pairs;
+    private static JLabel player2Pairs;
+    private static JLabel opponentHand;
+    private static JLabel rules;
+
 
     public static void initalizeGame()
     {
@@ -35,20 +42,48 @@ public class Game implements ActionListener {
     public static void initializeMainFrame()
     {
         mainFrame = new JFrame();
-        mainFrame.setSize(1000,1000);
+        mainFrame.setSize(600,500);
         mainFrame.setLayout(null);
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
+
+        playerOneListModel = new DefaultListModel<String>();
+        playerTwoListModel = new DefaultListModel<String>();
+
         guessList = new JList();
-        guessList.setBounds(20, 20, 300, 500);
+        guessList.setBounds(350, 100, 200, 300);
 
         playerOneListModel = new DefaultListModel<String>();
         playerTwoListModel = new DefaultListModel<String>();
 
         guessButton = new JButton("Guess");
-        guessButton.setBounds(400, 20, 100, 75);
+        guessButton.setBounds(150, 350, 100, 65);
+
+        player1Score = new JLabel("Player 1 Score = ");
+        player1Score.setBounds(50, 100, 300, 65);
+
+        player2Score = new JLabel("Player 2 Score = ");
+        player2Score.setBounds(50, 150, 300, 65);
+
+        player1Pairs = new JLabel("Most recent collected pair = ");
+        player1Pairs.setBounds(50, 125, 300, 65);
+
+        player2Pairs = new JLabel("Most recent collected pair = ");
+        player2Pairs.setBounds(50, 175, 300, 65);
+
+        opponentHand = new JLabel("Opponent has __ cards in their hand.");
+        opponentHand.setBounds(100, 200, 300, 65);
+
+        rules = new JLabel("1. ________");
+        rules.setBounds(20, -25, 300, 100);
+
 
         mainFrame.add(guessList);
+        mainFrame.add(player1Score);
+        mainFrame.add(player2Score);
+        mainFrame.add(player1Pairs);
+        mainFrame.add(player2Pairs);
+        mainFrame.add(rules);
+        mainFrame.add(opponentHand);
         mainFrame.add(guessButton);
         mainFrame.setVisible(true);
     }
