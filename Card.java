@@ -6,6 +6,7 @@ public class Card
 {
     private static ArrayList<String> deck;
 
+    // Creates a deck of 52 cards, the deck does not specify the suit of the cards, only the rank
     public static void initializeDeck()
     {
         deck = new ArrayList<String>();
@@ -28,6 +29,7 @@ public class Card
         }
     }
 
+    // deals a number of a cards to a specified player
     public static void dealCards(Player p, int n)
     {
         Random r = new Random();
@@ -41,6 +43,7 @@ public class Card
 
     }
 
+    // returns the deck of cards as an ArrayList
     public static ArrayList<String> getDeck()
     {
         return deck;
