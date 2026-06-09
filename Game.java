@@ -120,6 +120,7 @@ public class Game implements ActionListener {
         nextTurnButton = new JButton("Next Turn");
         nextTurnButton.setBounds(850, 500, 100, 50);
         nextTurnButton.addActionListener(g);
+        nextTurnButton.setVisible(false);
 
         mainFrame.add(guessListLabel);
         mainFrame.add(guessListScrollPane);
@@ -226,6 +227,7 @@ public class Game implements ActionListener {
         {
             guessButton.setVisible(false);
             guessList.setVisible(false);
+            nextTurnButton.setVisible(true);
             String guess = (String) guessList.getSelectedValue();
 
             if (turn.equals("playerOne"))
@@ -305,6 +307,7 @@ public class Game implements ActionListener {
         if (e.getActionCommand().equals("Next Turn"))
         {
             switchTurn();
+            nextTurnButton.setVisible(false);
             guessButton.setVisible(true);
             guessList.setVisible(true);
 
