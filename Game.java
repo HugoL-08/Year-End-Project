@@ -12,6 +12,8 @@ public class Game implements ActionListener {
 
     private static JFrame mainFrame;
 
+    private static JLabel rulesLabel;
+
     private static JScrollPane guessListScrollPane;
     private static JLabel guessListLabel;
     private static JList<String> guessList;
@@ -64,6 +66,9 @@ public class Game implements ActionListener {
         mainFrame.setLayout(null);
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        rulesLabel = new JLabel();
+        rulesLabel.setText("<html>Rules:<br>The objective of the game is to have the most pairs.<br>You play with a basic 52 card deck. When a player guesses, they must audibly anounce which card they are guessing for their opponent to hear. <br>The active player clicks the guess button, and the next player clicks the next turn button.<br>If you run out of cards you will be delt 3 cards and the game ends when a player trys to take a card from the empty deck.<br>By guessing cards you are attempting to steal a matching card from your opponent to make a pair.");
+        rulesLabel.setBounds(700, 20, 250, 400);
         
         guessListLabel = new JLabel("Player One/Two Hand");
         guessListLabel.setBounds(500, 20, 200, 20);
@@ -118,6 +123,8 @@ public class Game implements ActionListener {
 
         mainFrame.add(guessListLabel);
         mainFrame.add(guessListScrollPane);
+
+        mainFrame.add(rulesLabel);
 
         mainFrame.add(playerOnePairsListLabel);
         mainFrame.add(playerOnePairsScrollPane);
