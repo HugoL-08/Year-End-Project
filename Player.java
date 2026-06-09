@@ -48,11 +48,29 @@ public class Player
         }
     }
 
+    public static void emptyHand(Player p)
+    {
+        if (p.getHand().size() == 0)
+        {
+            if (Card.getDeck().size() <= 3)
+            {
+                Game.endGame();
+            }
+
+            else
+            {
+                Card.dealCards(p, Card.getDeck().size());
+            }
+            
+        }
+    }
+
     public int getScore()
     {
         return score;
     }
 }
+
 
 
 
