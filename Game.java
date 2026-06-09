@@ -11,23 +11,41 @@ public class Game implements ActionListener {
     private static String winner;
 
     private static JFrame mainFrame;
-    private static JList guessList;
-    private static DefaultListModel<String> playerOneListModel;
-    private static DefaultListModel<String> playerTwoListModel;
-    private static JButton guessButton;
-    private static JLabel player1Score;
-    private static JLabel player2Score;
-    private static JLabel player1Pairs;
-    private static JLabel player2Pairs;
-    private static JLabel opponentHand;
-    private static JLabel rules;
 
+    private static JScrollPane guessListScrollPane;
+    private static JLabel guessListLabel;
+    private static JList<String> guessList;
+
+    private static JScrollPane playerOnePairsScrollPane;
+    private static JList<String> playerOnePairsList;
+    private static JLabel playerOnePairsListLabel;
+
+    private static JScrollPane playerTwoPairsScrollPane;
+    private static JList<String> playerTwoPairsList;
+    private static JLabel playerTwoPairsListLabel;
+
+    private static JLabel playerOneScoreLabel;
+    private static JLabel playerTwoScoreLabel;
+
+    private static DefaultListModel<String> playerOneHandListModel;
+    private static DefaultListModel<String> playerOnePairsListModel;
+    private static DefaultListModel<String> playerTwoHandListModel;
+    private static DefaultListModel<String> playerTwoPairsListModel;
+
+    private static JButton guessButton;
+    private static JButton nextTurnButton;
+
+    public void Game()
+    {
+
+    }
 
     public static void initalizeGame()
     {
         Card.initializeDeck();
 
         turn = "playerOne";
+        winner = "";
 
         playerOne = new Player();
         playerTwo = new Player();
@@ -41,84 +59,132 @@ public class Game implements ActionListener {
 
     public static void initializeMainFrame()
     {
-        mainFrame = new JFrame();
-        mainFrame.setSize(600,500);
+        mainFrame = new JFrame("Go Fish!");
+        mainFrame.setSize(1000,600);
         mainFrame.setLayout(null);
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        playerOneListModel = new DefaultListModel<String>();
-        playerTwoListModel = new DefaultListModel<String>();
+        
+        guessListLabel = new JLabel("Player One/Two Hand");
+        guessListLabel.setBounds(500, 20, 200, 20);
+        guessList = new JList<String>();
 
-        guessList = new JList();
-        guessList.setBounds(350, 100, 200, 300);
+        
+        playerOnePairsListLabel = new JLabel("Player One Pairs");
+        playerOnePairsListLabel.setBounds(20, 20, 150, 20);
+        playerOnePairsList = new JList<String>();
 
-        playerOneListModel = new DefaultListModel<String>();
-        playerTwoListModel = new DefaultListModel<String>();
+        playerOneScoreLabel = new JLabel("Player One Score: " + playerOne.getScore());
+        playerOneScoreLabel.setBounds(20, 410, 150, 20);
+
+        
+        playerTwoPairsListLabel = new JLabel("Player Two Pairs");
+        playerTwoPairsListLabel.setBounds(170, 20, 100, 20);
+        playerTwoPairsList = new JList<String>();
+        playerTwoScoreLabel = new JLabel("Player Two Score: " + playerTwo.getScore());
+        playerTwoScoreLabel.setBounds(170, 410, 150, 20);
+
+        playerOneHandListModel = new DefaultListModel<String>();
+        playerOnePairsListModel = new DefaultListModel<String>();
+
+        playerTwoHandListModel = new DefaultListModel<String>();
+        playerTwoPairsListModel = new DefaultListModel<String>();
+
+        setGuessList();
+        setPairLists();
+
+        guessListScrollPane = new JScrollPane(guessList);
+        guessListScrollPane.setBounds(500, 50, 100, 200);
+        playerOnePairsScrollPane = new JScrollPane(playerOnePairsList);
+        playerOnePairsScrollPane.setBounds(20, 50, 100, 350);
+        playerTwoPairsScrollPane = new JScrollPane(playerTwoPairsList);
+        playerTwoPairsScrollPane.setBounds(170, 50, 100, 350);
+
+
+
+        guessList.setModel(playerOneHandListModel);
+        playerOnePairsList.setModel(playerOnePairsListModel);
+        playerTwoPairsList.setModel(playerTwoPairsListModel);
+
+        Game g = new Game();
 
         guessButton = new JButton("Guess");
-        guessButton.setBounds(150, 350, 100, 65);
+        guessButton.setBounds(750, 500, 75, 50);
+        guessButton.addActionListener(g);
 
-        player1Score = new JLabel("Player 1 Score = ");
-        player1Score.setBounds(50, 100, 300, 65);
+        nextTurnButton = new JButton("Next Turn");
+        nextTurnButton.setBounds(850, 500, 100, 50);
+        nextTurnButton.addActionListener(g);
 
-        player2Score = new JLabel("Player 2 Score = ");
-        player2Score.setBounds(50, 150, 300, 65);
+        mainFrame.add(guessListLabel);
+        mainFrame.add(guessListScrollPane);
 
-        player1Pairs = new JLabel("Most recent collected pair = ");
-        player1Pairs.setBounds(50, 125, 300, 65);
+        mainFrame.add(playerOnePairsListLabel);
+        mainFrame.add(playerOnePairsScrollPane);
+        mainFrame.add(playerOneScoreLabel);
 
-        player2Pairs = new JLabel("Most recent collected pair = ");
-        player2Pairs.setBounds(50, 175, 300, 65);
+        mainFrame.add(playerTwoPairsListLabel);
+        mainFrame.add(playerTwoPairsScrollPane);
+        mainFrame.add(playerTwoScoreLabel);
 
-        opponentHand = new JLabel("Opponent has __ cards in their hand.");
-        opponentHand.setBounds(100, 200, 300, 65);
-
-        rules = new JLabel("1. ________");
-        rules.setBounds(20, -25, 300, 100);
-
-
-        mainFrame.add(guessList);
-        mainFrame.add(player1Score);
-        mainFrame.add(player2Score);
-        mainFrame.add(player1Pairs);
-        mainFrame.add(player2Pairs);
-        mainFrame.add(rules);
-        mainFrame.add(opponentHand);
         mainFrame.add(guessButton);
+        mainFrame.add(nextTurnButton);
         mainFrame.setVisible(true);
+
+        JOptionPane.showMessageDialog(mainFrame, "Go Fish Has Begun! It is now Player One's turn.", "Welcome Message", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public static void updateGuessList()
+    public static void setGuessList()
     {
-        playerOneListModel.clear();
-        playerTwoListModel.clear();
+        playerOneHandListModel.clear();
+        playerTwoHandListModel.clear();
 
-        for (String s : playerOne.getHand())
+        for (String stringOne : playerOne.getHand())
         {
-            playerOneListModel.addElement(s);
+            playerOneHandListModel.addElement(stringOne);
         }
 
-        for (String s : playerTwo.getHand())
+        for (String stringTwo : playerTwo.getHand())
         {
-            playerTwoListModel.addElement(s);
+            playerTwoHandListModel.addElement(stringTwo); 
+        }
+    }
+
+    public static void setPairLists()
+    {
+        playerOnePairsListModel.clear();
+        playerTwoPairsListModel.clear();
+
+        for (String stringOne : playerOne.getPairs())
+        {
+            playerOnePairsListModel.addElement(stringOne);
         }
 
-        if (turn.equals("playerOne"))
+        for (String stringTwo : playerTwo.getPairs())
         {
-            guessList.setModel(playerTwoListModel);
-            turn = "playerTwo";
-        }
-
-        if (turn.equals("playerTwo"))
-        {
-            guessList.setModel(playerOneListModel);
-            turn = "playerOne";
+            playerTwoPairsListModel.addElement(stringTwo);
         }
     }
 
     public static void switchTurn()
     {
-        
+        if (turn.equals("playerOne"))
+        {
+            turn = "playerTwo";
+            setGuessList();
+            setPairLists();
+            guessList.setModel(playerTwoHandListModel);
+            JOptionPane.showMessageDialog(mainFrame, "It is now Player Two's turn.", "Next Turn", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        else if (turn.equals("playerTwo"))
+        {
+            turn = "playerOne";
+            setGuessList();
+            setPairLists();
+            guessList.setModel(playerOneHandListModel);
+            JOptionPane.showMessageDialog(mainFrame, "It is now Player One's turn.", "Next Turn", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     public static void determineWinner()
@@ -128,7 +194,7 @@ public class Game implements ActionListener {
             winner = "Congratulations Player One, you have won!";
         }
 
-        if (playerTwo.getScore() > playerOne.getScore())
+        else if (playerTwo.getScore() > playerOne.getScore())
         {
             winner = "Congratulations Player Two, you have won!";
         }
@@ -137,19 +203,105 @@ public class Game implements ActionListener {
         {
             winner = "Sorry, both players have tied.";
         }
-    }
-    
-    public static void testGame()
-    {
-        
+
+        JOptionPane.showMessageDialog(mainFrame, winner, "Game Over!", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public static void endGame()
+    {
+        mainFrame.setVisible(false);
+        determineWinner();
+    }
+    
     public void actionPerformed(ActionEvent e)
     {
         if (e.getActionCommand().equals("Guess"))
         {
-            
+            guessButton.setVisible(false);
+            guessList.setVisible(false);
+            String guess = (String) guessList.getSelectedValue();
+
+            if (turn.equals("playerOne"))
+            {
+                boolean foundPair = false;
+                for (int i = 0; i < playerTwo.getHand().size(); i++)
+                {
+                    if (guess.equals(playerTwo.getHand().get(i)))
+                    {
+                        playerOne.addToHand(playerTwo.getHand().get(i));
+                        playerOne.findPairs();
+                        playerTwo.getHand().remove(i);
+                        foundPair = true;
+                        playerOneScoreLabel.setText("Player One Score: " + playerOne.getScore());
+                    }
+                }
+                if (foundPair == false)
+                {
+                    if (Card.getDeck().size() == 0)
+                    {
+                        endGame();
+                    }
+                    else 
+                    {
+                        Card.dealCards(playerOne, 1);
+                        playerOne.findPairs();
+                        playerOneScoreLabel.setText("Player One Score: " + playerOne.getScore());
+                    }
+                    
+                }
+            }
+
+            else if (turn.equals("playerTwo"))
+            {
+                boolean foundPair = false;
+                for (int i = 0; i < playerOne.getHand().size(); i++)
+                {
+                    if (guess.equals(playerOne.getHand().get(i)))
+                    {
+                        playerTwo.addToHand(playerOne.getHand().get(i));
+                        playerTwo.findPairs();
+                        playerOne.getHand().remove(i);
+                        foundPair = true;
+                        playerTwoScoreLabel.setText("Player Two Score: " + playerTwo.getScore());
+                    }
+                }
+
+                if (foundPair == false)
+                {
+                    if (Card.getDeck().size() == 0)
+                    {
+                        endGame();
+                    }
+
+                    else
+                    {
+                        Card.dealCards(playerTwo, 1);
+                        playerTwo.findPairs();
+                        playerTwoScoreLabel.setText("Player Two Score: " + playerTwo.getScore());
+                    }
+                    
+                }
+            }
+
+            else
+            {
+                
+            }
+
+            Player.emptyHand(playerOne);
+            Player.emptyHand(playerTwo);
+
+            setGuessList();
+            setPairLists();
+        }
+
+        if (e.getActionCommand().equals("Next Turn"))
+        {
+            switchTurn();
+            guessButton.setVisible(true);
+            guessList.setVisible(true);
+
         }
     }
-}
 
+}
