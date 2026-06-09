@@ -42,6 +42,7 @@ public class Game implements ActionListener {
 
     }
 
+    // specifies player one as having the first move, creates the deck of cards, deals the players their initial hands, finds any pairs
     public static void initalizeGame()
     {
         Card.initializeDeck();
@@ -59,6 +60,7 @@ public class Game implements ActionListener {
         playerTwo.findPairs();
     }
 
+    // Creates the GUI with the rules, lists, and buttons; begins the first turn
     public static void initializeMainFrame()
     {
         mainFrame = new JFrame("Go Fish!");
@@ -142,6 +144,7 @@ public class Game implements ActionListener {
         JOptionPane.showMessageDialog(mainFrame, "Go Fish Has Begun! It is now Player One's turn.", "Welcome Message", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    // Sets the guess list to the appropriate player's hand
     public static void setGuessList()
     {
         playerOneHandListModel.clear();
@@ -158,6 +161,7 @@ public class Game implements ActionListener {
         }
     }
 
+    // sets the pair lists to each of the player's hands
     public static void setPairLists()
     {
         playerOnePairsListModel.clear();
@@ -174,6 +178,7 @@ public class Game implements ActionListener {
         }
     }
 
+    // switches the turn from one player to another, resets the guess and pair lists
     public static void switchTurn()
     {
         if (turn.equals("playerOne"))
@@ -195,6 +200,7 @@ public class Game implements ActionListener {
         }
     }
 
+    // at the game's end this method determines which player won, or if there was a draw
     public static void determineWinner()
     {
         if (playerOne.getScore() > playerTwo.getScore())
@@ -215,12 +221,14 @@ public class Game implements ActionListener {
         JOptionPane.showMessageDialog(mainFrame, winner, "Game Over!", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    // ends the game after either a win, loss, or draw
     public static void endGame()
     {
         mainFrame.setVisible(false);
         determineWinner();
     }
-    
+
+    // lets the players guess cards and switch turns; deals the player a card if they guess incorrectly
     public void actionPerformed(ActionEvent e)
     {
         if (e.getActionCommand().equals("Guess"))
