@@ -8,5 +8,6 @@ public class Main
     {
         Game.initalizeGame();
         Game.initializeMainFrame();
+
     }
 }
