@@ -59,7 +59,7 @@ public class Player
 
             else
             {
-                Card.dealCards(p, Card.getDeck().size());
+                Card.dealCards(p, 3);
             }
             
         }
